@@ -287,8 +287,9 @@ function main() {
 
     check_required_executables 'kubectl' 'tmux'
 
+    local commands=("$@")
     if [[ $# -eq 0 ]]; then
-        error_and_exit 'you must specify at least one command for the container'
+        commands=("sh" "-c" "clear; (bash || ash || sh)")
     fi
 
     if ( [[ -z "${selector:-}" ]] && [[ -z "${pod_list_file:-}" ]] ) ||
@@ -312,7 +313,6 @@ function main() {
         contexts=('')
     fi
 
-    local commands=("$@")
 
     local kubectl_exec_opts='-i -t'
     if [[ ! -z "${container_name:-}" ]]; then
